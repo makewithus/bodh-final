@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHATBOT</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div class="background-animation">
+    <div class="blurred-sphere"></div>
+  </div>
+
+  <div class="content-main">
+    <div class="content-1">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <h1 class="hero-title">
+          Hello, I'm 
+          <span style="background: linear-gradient(135deg, #79804D, #545f3d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">CHAAYA</span>
+        </h1>
+        <p class="hero-subtitle-1">
+          <span style="display: inline-block; width: 1ch;"></span>
+          I am here to help you 
+          <span id="typed-text-container" style="display: inline-block; min-width: 8ch; text-align: left;">
+            <span id="typed-text"></span>
+          </span>
+        </p>
+        <p class="hero-subtitle-2">How can I help you today?</p>
+      </section>
+    
+      <!-- Button Grid -->
+      <div class="button-container">
+        <div class="elevated-box" data-message="What is BODH educational platform?">
+          <i class="fas fa-info-circle fa-2x"></i>
+          <p class="mb-0">What is BODH educational platform?</p>
+        </div>
+        <div class="elevated-box" data-message="What are the courses offered by BODH?">
+          <i class="fas fa-list-alt fa-2x"></i>
+          <p class="mb-0">What are the courses offered by BODH?</p>
+        </div>
+        <div class="elevated-box" data-message="What are the benefits of learning with BODH?">
+          <i class="fas fa-award fa-2x"></i>
+          <p class="mb-0">What are the benefits of learning with BODH?</p>
+        </div>
+      </div>
+    </div>
+    <!-- Chat Area -->
+    <div class="chat-area" id="chatArea" style="display: none;">
+      <div class="chat-messages" id="chatMessages"></div>
+    </div>
+  
+    <div class="content-2">
+      <!-- Query Box -->
+      <div class="query-box" id="queryBox">
+        <textarea
+          id="queryInput"
+          rows="1"
+          placeholder="Ask me anything..."
+          onfocus="addFocus()"
+          onblur="removeFocus()"
+        ></textarea>
+        <button id="sendButton">
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    var typed = new Typed('#typed-text', {
+      strings: ['Explore.', 'Support.', 'Elevate.'],
+      typeSpeed: 50,
+      backSpeed: 50,
+      backDelay: 1200,
+      startDelay: 10,
+      loop: true,
+      showCursor: true,
+      cursorChar: '|',
+    });
+
+    function addFocus() {
+      document.getElementById("queryBox").classList.add("focused");
+    }
+
+    function removeFocus() {
+      document.getElementById("queryBox").classList.remove("focused");
+    }
+
+
+    const textarea = document.getElementById("queryInput");
+    textarea.addEventListener("input", () => {
+      textarea.style.height = "auto";
+      textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px";
+    });
+
+
+
+    const queryBox = document.getElementById("queryBox");
+    const queryInput = document.getElementById("queryInput");
+    const sendButton = document.getElementById("sendButton");
+    const content1 = document.querySelector(".content-1");
+    const chatArea = document.getElementById("chatArea");
+    const chatMessages = document.getElementById("chatMessages");
+
+    function addMessageBubble(text, sender,isHTML = false) {
+      const bubble = document.createElement("div");
+      bubble.classList.add("chat-message", sender);
+      if (isHTML) {
+        bubble.innerHTML = marked.parse(text); // parse markdown to HTML
+      } else {
+        bubble.textContent = text;
+      }
+      chatMessages.appendChild(bubble);
+      chatArea.scrollTo({
+        top: chatArea.scrollHeight,
+        behavior: "smooth"
+      });
+      return bubble;
+    }
+
+    // Send on Enter key press (without Shift)
+    textarea.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault(); // prevent newline
+        sendButton.click(); // trigger send button
+      }
+    });
+  
+    // Send button click = enter chat mode and show message
+    sendButton.addEventListener("click", () => {
+      const userMessage = queryInput.value.trim();
+      if (!userMessage) return;
+  
+      // 1. Hide welcome, show chat
+      content1.style.display = "none";
+      chatArea.style.display = "block";
+
+      //2. add user message
+      addMessageBubble(userMessage,"user");
+  
+      // 3. Show typing indicator immediately
+      const typingBubble = addMessageBubble('<span class="typing-dots jump"><span>.</span><span>.</span><span>.</span></span>', "bot", true);
+
+  
+    
+      // 4. Call FastAPI backend
+      fetch("http://127.0.0.1:8000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: userMessage })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const reply = data.reply || "Sorry, something went wrong.";
+        typingBubble.innerHTML = marked.parse(reply);  // update the same bubble
+      })
+      .catch(error => {
+        console.error("Error from backend:", error);
+        typingBubble.innerHTML = marked.parse("Sorry, something went wrong.");  // update the same bubble
+      });
+  
+      // 5. Reset textarea
+      queryInput.value = "";
+      queryInput.style.height = "auto";
+    });
+  
+
+    // Handle button clicks
+    document.querySelectorAll(".elevated-box").forEach(box => {
+      box.addEventListener("click", () => {
+        const message = box.getAttribute("data-message");
+
+        content1.style.display = "none";
+        chatArea.style.display = "block";
+
+        //2. add user message
+        addMessageBubble(message,"user");
+
+        // 3. Show typing indicator immediately
+        const typingBubble = addMessageBubble('<span class="typing-dots jump"><span>.</span><span>.</span><span>.</span></span>', "bot", true);
+
+
+        // 4. Call FastAPI backend
+        fetch("http://127.0.0.1:8000/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: message })
+        })
+        .then(res => res.json())
+        .then(data => {
+          const reply = data.reply || "Sorry, something went wrong.";
+          typingBubble.innerHTML = marked.parse(reply);  // update the same bubble
+        })
+        .catch(error => {
+          console.error("Error from backend:", error);
+          typingBubble.innerHTML = marked.parse("Sorry, something went wrong.");  // update the same bubble
+        });
+    
+        // 5. Reset textarea
+        queryInput.value = "";
+        queryInput.style.height = "auto";
+      });
+    });
+  </script>
+
+</body>
+</html>
