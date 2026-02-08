@@ -1,0 +1,153 @@
+/* Tailwind base styles needed for your form */
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Utility classes used in your form */
+.w-full {
+  width: 100%;
+}
+
+.h-12 {
+  height: 3rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-gray-900 {
+  color: rgb(17 24 39);
+}
+
+.placeholder-gray-400::placeholder {
+  color: rgb(156 163 175);
+}
+
+.bg-gray-100 {
+  background-color: rgb(243 244 246);
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+/* Button styles */
+.hover\:text-light-purple:hover {
+  color: #a9e5b6;
+}
+
+.bg-dark-purple {
+  background-color: #825b42;
+}
+
+.md\:w-\[60\%\] {
+  width: 60%;
+}
+
+.md\:py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.w-\[50\%\] {
+  width: 50%;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.text-white {
+  color: rgb(255 255 255);
+}
+
+.no-underline {
+  text-decoration-line: none;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+/* Media queries */
+@media (min-width: 768px) {
+  .md\:w-\[60\%\] {
+    width: 60%;
+  }
+  .md\:py-5 {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+}
+
+/* Container for each skill item */
+.skill-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 320px; /* Adjust width as needed */
+  margin: 20px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: #ffffff; /* White background for contrast */
+  transition: transform 0.3s ease-in-out;
+}
+
+.skill-card:hover {
+  transform: translateY(-5px); /* Hover effect */
+
+}
+
+/* Image container */
+.skill-image {
+  width: 100%;
+  height: 180px; /* Adjust height as needed */
+  background-size: cover;
+  background-position: center;
+}
+
+/* Text content */
+.skill-content {
+  padding: 15px;
+  text-align: center;
+  background: #f9faf8; /* Light gray background */
+}
+
+
+.skill-tag {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.skill-title {
+  font-size: 16px;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+}

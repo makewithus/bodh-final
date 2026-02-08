@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+ <meta name="description" content="BODH is a catalytic learning platform reimagining education in its true form through practical, personalized, and student-centric one-on-one learning.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="BODH – A Catalyst for True, Student-Centric Learning">
+<meta property="og:description" content="BODH brings learning back to its true essence with a practical, personalized, and student-first approach beyond rigid systems.">
+<meta property="og:url" content="https://bodh.education/">
+<meta property="og:image" content="https://bodh.education/assets/og-image.jpg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BODH – Reviving the True Form of Learning">
+<meta name="twitter:description" content="A student-centric learning platform focused on practical understanding, personalization, and meaningful growth.">
+<meta name="twitter:image" content="https://bodh.education/assets/og-image.jpg">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CHATBOT</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="chaaya.css">
+</head>
+<body>
+  <div class="background-animation">
+    <div class="blurred-sphere"></div>
+  </div>
+
+  <div class="content-main">
+    <!-- Welcome Section -->
+    <div class="content-1">
+      <section class="hero-section">
+        <h1 class="hero-title">
+          Hello, I'm 
+          <span style="background: linear-gradient(135deg, #79804D, #545f3d); 
+                       -webkit-background-clip: text; 
+                       -webkit-text-fill-color: transparent; 
+                       display: inline-block;">CHAAYA</span>
+        </h1>
+        <p class="hero-subtitle-1">Your calm companion from BODH</p>
+        <p class="hero-subtitle-2">
+          <span style="display: inline-block; width: 1ch;"></span>
+          I am here to help you 
+          <span id="typed-text-container" 
+                style="display: inline-block; min-width: 8ch; text-align: left;">
+            <span id="typed-text"></span>
+          </span>
+        </p>
+        
+      </section>
+
+      <!-- Quick Question Buttons -->
+      <div class="button-container">
+        <div class="elevated-box">
+          <i class="fas fa-lightbulb fa-2x"></i>
+          <p class="mb-0">Clear your doubts. Master your concepts.</p>
+        </div>
+        <div class="elevated-box">
+          <i class="fas fa-compass fa-2x"></i>
+          <p class="mb-0">Discover skills. Shape your path.</p>
+        </div>
+        <div class="elevated-box">
+          <i class="fas fa-graduation-cap fa-2x"></i>
+          <p class="mb-0">Why BODH? What we offer? How to begin?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Section alternate for content-1 -->
+    <div class="chat-container" id="chatArea" style="display: none;">
+      <div class="chat-title-box">
+        <button id="backToHome">
+          <i class="fa-solid fa-arrow-left"></i> 
+        </button>
+        <p>CHAAYA</p>
+      </div>
+      <div class="chat-area">
+        <div class="chat-messages" id="chatMessages"></div>
+      </div>
+    </div>
+
+    <!-- Input Section -->
+    <div class="content-2">
+      <div class="query-box" id="queryBox">
+        <textarea id="queryInput"
+                  rows="1"
+                  placeholder="Ask me anything..."
+                  onfocus="addFocus()"
+                  onblur="removeFocus()"></textarea>
+        <button id="sendButton">
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="content-3">
+      <p>I guide, support, and suggest - not replace real learning or decisions.</p>
+      <p>Know more here - 
+        <a href="meet_chaaya.html" style="text-decoration: none;">
+          <span style="color: rgb(116, 128, 38); font-weight: 600;">
+            Meet CHAAYA
+          </span>
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+    if (window.visualViewport) {
+      const main = document.querySelector('.content-main');
+      window.visualViewport.addEventListener('resize', () => {
+        main.style.height = window.visualViewport.height + 'px';
+      });
+    }
+
+    
+    var typed = new Typed('#typed-text', {
+      strings: ['Learn. ', 'Grow. ', 'Explore.'],
+      typeSpeed: 50,
+      backSpeed: 50,
+      backDelay: 1200,
+      startDelay: 10,
+      loop: true,
+      showCursor: true,
+      cursorChar: '|',
+    });
+
+    function addFocus() {
+      document.getElementById("queryBox").classList.add("focused");
+    }
+
+    function removeFocus() {
+      document.getElementById("queryBox").classList.remove("focused");
+    }
+
+    const textarea = document.getElementById("queryInput");
+    textarea.addEventListener("input", () => {
+      textarea.style.height = "auto";
+      textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px";
+    });
+
+    const queryInput = document.getElementById("queryInput");
+    const sendButton = document.getElementById("sendButton");
+    const content1 = document.querySelector(".content-1");
+    const content3 = document.querySelector(".content-3");
+    const chatArea = document.getElementById("chatArea");
+    const chatMessages = document.getElementById("chatMessages");
+
+    function addMessageBubble(text, sender, isHTML = false) {
+      const bubble = document.createElement("div");
+      bubble.classList.add("chat-message", sender);
+      bubble.innerHTML = isHTML ? marked.parse(text) : text;
+      chatMessages.appendChild(bubble);
+
+      const chatScroll = chatArea.querySelector(".chat-area");
+      chatScroll.scrollTo({
+        top: chatScroll.scrollHeight,
+        behavior: "smooth"
+      });
+      return bubble;
+    }
+
+    textarea.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendButton.click();
+      }
+    });
+
+    function getSessionId() {
+      const SESSION_KEY = "bodh_chaaya_session_id";
+    
+      // Check if already stored
+      let sessionId = localStorage.getItem(SESSION_KEY);
+    
+      if (!sessionId) {
+        // Generate a new unique ID
+        sessionId = crypto.randomUUID();
+    
+        // Save to localStorage
+        localStorage.setItem(SESSION_KEY, sessionId);
+    
+        // Optionally save a timestamp to auto-expire later
+        localStorage.setItem(SESSION_KEY + "_created", Date.now());
+      }
+    
+      return sessionId;
+    }
+
+    sendButton.addEventListener("click", () => {
+      const userMessage = queryInput.value.trim();
+      if (!userMessage) return;
+
+      content1.style.display = "none";
+      content3.style.display = "none";
+      chatArea.style.display = "flex";
+
+      addMessageBubble(userMessage, "user");
+
+      const typingBubble = addMessageBubble(
+        '<span class="typing-dots jump"><span></span><span></span><span></span></span>', 
+        "bot", true
+      );
+
+      fetch("https://bodh-chatbot-server-aae5cnhjfydugbdt.centralindia-01.azurewebsites.net/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: getSessionId(),
+          message: userMessage,
+          end_session: false
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        typingBubble.innerHTML = marked.parse(data.reply || "Sorry, something went wrong.");
+      })
+      .catch(() => {
+        typingBubble.innerHTML = "Sorry, something went wrong.";
+      });
+
+      queryInput.value = "";
+      queryInput.style.height = "auto";
+    });
+
+
+
+    const backToHomeButton = document.getElementById("backToHome");
+    backToHomeButton.addEventListener("click", () => {
+      // Clear all chat messages
+      chatMessages.innerHTML = "";
+
+
+      content1.style.display = "flex";
+      content3.style.display = "flex";
+      chatArea.style.display = "none";
+    });
+  </script>
+</body>
+</html>
